@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>For My Wifey — Mini Postcards & Love Letters</title>
+  <link href="styles.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="top">
+    <div class="container">
+      <h1>For My Wifey</h1>
+      <p class="sub">15 months and counting — postcards, acrostics, and tiny love drops.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Virtual Postcard Album</h2>
+      <p class="muted">Create a postcard, save it locally, and open together on your date night.</p>
+
+      <form id="postcardForm" class="form-row">
+        <div class="field">
+          <label>Title</label>
+          <input id="pcTitle" placeholder="e.g., Month 15 — Balcony Night" maxlength="60" />
+        </div>
+        <div class="field">
+          <label>Month / Tag</label>
+          <input id="pcTag" placeholder="e.g., Month 15" maxlength="30" />
+        </div>
+        <div class="field">
+          <label>Message</label>
+          <textarea id="pcMsg" rows="3" placeholder="Write something short and true..."></textarea>
+        </div>
+        <div class="field">
+          <label>Photo (optional)</label>
+          <input id="pcImg" type="file" accept="image/*" />
+        </div>
+        <div class="actions">
+          <button type="button" id="savePostcard">Save Postcard</button>
+          <button type="button" id="clearPostcards" class="danger">Clear All</button>
+        </div>
+      </form>
+
+      <div id="postcardList" class="postcard-list"></div>
+    </section>
+
+    <section class="card">
+      <h2>Love Letter Generator — Acrostic</h2>
+      <p class="muted">Type a name or pet name and get a ready-to-send acrostic love letter. Tweak lines if you want.</p>
+
+      <div class="form-row">
+        <input id="acrosticName" placeholder="e.g., Wifey, Pookie, My Love, Hayati" />
+        <div class="actions">
+          <button id="generateAcrostic">Generate</button>
+          <button id="copyAcrostic">Copy</button>
+          <button id="downloadAcrostic">Download</button>
+        </div>
+      </div>
+
+      <div id="acrosticResult" class="result"></div>
+    </section>
+
+    <section class="card">
+      <h2>Quick Extras</h2>
+      <p class="muted">Little helpers to make sending easier.</p>
+      <div class="grid">
+        <button id="makeWallpaper">Make a simple phone wallpaper (download)</button>
+        <button id="countdownTemplate">Get a countdown image template (download)</button>
+        <button id="randomPrompt">Get a sweet voice-note prompt</button>
+      </div>
+      <div id="extraResult" class="result"></div>
+    </section>
+
+    <footer class="card small">
+      <p class="muted">Tip: open this on your phone and desktop. Postcards sync to this browser only (stored in your device). To share, use the copy or download options.</p>
+      <p class="muted">Made for your 15-month night — tweak freely.</p>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+:root{
+  --bg:#f6f7fb;
+  --card:#ffffff;
+  --muted:#667085;
+  --accent:#dfe7ff;
+  --accent-2:#6b46ff;
+  --text:#0f1724;
+  --danger:#ff6b6b;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:linear-gradient(180deg,var(--bg),#eef2ff);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height:1.45;
+}
+
+.container{
+  max-width:920px;
+  margin:20px auto;
+  padding:16px;
+}
+
+.top{
+  text-align:center;
+  padding:28px 0 6px;
+}
+.top h1{margin:0;font-size:28px;letter-spacing:0.2px}
+.top .sub{margin:6px 0 0;color:var(--muted)}
+
+.card{
+  background:var(--card);
+  border-radius:12px;
+  padding:18px;
+  box-shadow:0 6px 20px rgba(18,38,63,0.06);
+  margin:16px 0;
+}
+
+.small{font-size:14px;padding:12px}
+
+.form-row{display:flex;flex-wrap:wrap;gap:12px}
+.field{flex:1 1 240px;display:flex;flex-direction:column;gap:8px}
+.field label{font-size:13px;color:var(--muted)}
+input[type="text"], input[type="file"], input, textarea{
+  padding:10px 12px;border-radius:8px;border:1px solid #e6e9ef;background:#fbfdff;
+  font-size:15px;outline:none;
+}
+textarea{resize:vertical}
+
+.actions{display:flex;gap:8px;align-items:center}
+button{
+  padding:10px 14px;border-radius:10px;border:0;background:linear-gradient(90deg,var(--accent-2),#3850ff);color:white;
+  font-weight:600;cursor:pointer;
+}
+button.danger{background:var(--danger);box-shadow:none}
+button:active{transform:translateY(1px)}
+
+.muted{color:var(--muted);font-size:14px}
+
+.postcard-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:12px}
+.postcard{
+  border-radius:10px;overflow:hidden;border:1px solid #eef2ff;background:linear-gradient(180deg,#fff,#fbfbff);
+  display:flex;flex-direction:column;
+}
+.postcard .img{height:140px;background:#f2f6ff;background-size:cover;background-position:center}
+.postcard .meta{padding:10px}
+.postcard .meta h3{margin:0;font-size:15px}
+.postcard .meta p{margin:8px 0 0;color:var(--muted);font-size:14px}
+.card .result{margin-top:12px;padding:12px;border-radius:8px;background:var(--accent);color:#071033}
+.grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+
+@media (max-width:640px){
+  .form-row{flex-direction:column}
+  .field{flex:1 1 auto}
+}
+
+// Simple single-file app: postcards in localStorage, acrostic generator, small extras
+const qs = (s) => document.querySelector(s);
+
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+
+/* ---------- Postcards ---------- */
+const postcardForm = qs('#postcardForm');
+const pcTitle = qs('#pcTitle');
+const pcTag = qs('#pcTag');
+const pcMsg = qs('#pcMsg');
+const pcImg = qs('#pcImg');
+const saveBtn = qs('#savePostcard');
+const listEl = qs('#postcardList');
+const clearBtn = qs('#clearPostcards');
+
+function loadPostcards(){
+  const raw = localStorage.getItem('postcards_v1') || '[]';
+  try { return JSON.parse(raw); } catch(e){ return []; }
+}
+function savePostcards(arr){
+  localStorage.setItem('postcards_v1', JSON.stringify(arr));
+}
+function renderPostcards(){
+  const arr = loadPostcards();
+  listEl.innerHTML = '';
+  if(!arr.length){
+    listEl.innerHTML = `<p class="muted">No postcards yet — make one and save it. They stay in this browser.</p>`;
+    return;
+  }
+  arr.slice().reverse().forEach(pc => {
+    const el = document.createElement('div'); el.className='postcard';
+    const imgDiv = document.createElement('div'); imgDiv.className='img';
+    if(pc.img) imgDiv.style.backgroundImage = `url(${pc.img})`;
+    const meta = document.createElement('div'); meta.className='meta';
+    const h3 = document.createElement('h3'); h3.textContent = pc.title || pc.tag || 'Postcard';
+    const p = document.createElement('p'); p.textContent = pc.msg || '';
+    const tag = document.createElement('small'); tag.className='muted'; tag.textContent = pc.tag || '';
+    const actions = document.createElement('div'); actions.style.marginTop='10px'; actions.style.display='flex'; actions.style.gap='8px';
+    const copyBtn = document.createElement('button'); copyBtn.textContent='Copy Message';
+    copyBtn.onclick = ()=> navigator.clipboard.writeText((pc.title?pc.title + '\n':'') + pc.msg);
+    const dlBtn = document.createElement('button'); dlBtn.textContent='Download'; dlBtn.onclick = ()=> {
+      const blob = new Blob([ (pc.title ? pc.title + '\n\n' : '') + pc.msg ], {type:'text/plain'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href=url; a.download = (pc.tag || 'postcard') + '.txt'; a.click(); URL.revokeObjectURL(url);
+    };
+    const delBtn = document.createElement('button'); delBtn.textContent='Delete'; delBtn.className='danger';
+    delBtn.onclick = ()=>{
+      if(!confirm('Delete this postcard?')) return;
+      const arr = loadPostcards().filter(x=>x.id !== pc.id); savePostcards(arr); renderPostcards();
+    };
+    actions.appendChild(copyBtn); actions.appendChild(dlBtn); actions.appendChild(delBtn);
+
+    meta.appendChild(h3); meta.appendChild(tag); meta.appendChild(p); meta.appendChild(actions);
+    el.appendChild(imgDiv); el.appendChild(meta);
+    listEl.appendChild(el);
+  });
+}
+
+saveBtn.addEventListener('click', async ()=>{
+  const title = pcTitle.value.trim();
+  const tag = pcTag.value.trim();
+  const msg = pcMsg.value.trim();
+  if(!title && !msg){
+    alert('Give it a title or message — something to save.');
+    return;
+  }
+  let imgData = null;
+  if(pcImg.files && pcImg.files[0]){
+    imgData = await toDataURL(pcImg.files[0]);
+  }
+  const arr = loadPostcards();
+  arr.push({ id: uid(), title, tag, msg, img: imgData, created: new Date().toISOString() });
+  savePostcards(arr);
+  pcTitle.value=''; pcTag.value=''; pcMsg.value=''; pcImg.value='';
+  renderPostcards();
+});
+
+clearBtn.addEventListener('click', ()=>{
+  if(!confirm('Clear all postcards in this browser?')) return;
+  localStorage.removeItem('postcards_v1');
+  renderPostcards();
+});
+
+function toDataURL(file){
+  return new Promise((res,rej)=>{
+    const r = new FileReader();
+    r.onload = ()=> res(r.result);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+
+/* ---------- Acrostic ---------- */
+const acroName = qs('#acrosticName');
+const genBtn = qs('#generateAcrostic');
+const resDiv = qs('#acrosticResult');
+const copyAcro = qs('#copyAcrostic');
+const downloadAcro = qs('#downloadAcrostic');
+
+function smartLine(letter, idx, length){
+  // Short library of gentle templates; keep it flexible and sweet
+  const templates = [
+    `${letter} — Always the calm I didn't know I needed.`,
+    `${letter} — I find a reason to smile every time I think of you.`,
+    `${letter} — You make ordinary things feel like home.`,
+    `${letter} — I keep you with me in the quiet and loud.`,
+    `${letter} — You’re the reason my days feel softer.`,
+    `${letter} — My favorite part of every plan is you in it.`,
+    `${letter} — Your laugh rewrites my whole day.`,
+    `${letter} — I’d cross any distance just to hold you again.`,
+    `${letter} — Days feel kinder with your name in them.`,
+    `${letter} — You make love feel easy and real.`,
+  ];
+  // vary choice by index so repeats are less likely
+  return templates[(idx + letter.charCodeAt(0)) % templates.length];
+}
+
+genBtn.addEventListener('click', ()=>{
+  const name = acroName.value.trim();
+  if(!name){ alert('Type a name or nickname (e.g., Wifey, Pookie)'); return; }
+  const cleaned = name.replace(/\s+/g,'').toUpperCase();
+  const lines = [];
+  for(let i=0;i<cleaned.length;i++){
+    const ch = cleaned[i];
+    // if non-letter, just print the character
+    if(!/[A-Z]/.test(ch)){
+      lines.push(`${ch}`);
+    } else {
+      lines.push(smartLine(ch, i, cleaned.length));
+    }
+  }
+  resDiv.textContent = lines.join('\n');
+});
+
+copyAcro.addEventListener('click', ()=>{
+  const text = resDiv.textContent || '';
+  if(!text){ alert('Generate an acrostic first.'); return; }
+  navigator.clipboard.writeText(text).then(()=> alert('Copied — paste in a text, note, or message.') );
+});
+
+downloadAcro.addEventListener('click', ()=>{
+  const text = resDiv.textContent || '';
+  if(!text){ alert('Generate an acrostic first.'); return; }
+  const blob = new Blob([text], {type:'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'acrostic.txt'; a.click(); URL.revokeObjectURL(url);
+});
+
+/* ---------- Extras ---------- */
+const extraResult = qs('#extraResult');
+qs('#randomPrompt').addEventListener('click', ()=>{
+  const prompts = [
+    'Whisper a memory you can replay forever. Keep it soft, keep it short.',
+    'Say: "I wish you were here" and then name one tiny thing you’d do if she appeared now.',
+    'Record a 20-second message that starts: "Close your eyes. Picture us..."',
+    'Tell her one small promise you make for the next month.',
+    'Say: "In fifteen months I want us to..." and finish that sentence.'
+  ];
+  const p = prompts[Math.floor(Math.random()*prompts.length)];
+  extraResult.textContent = p;
+});
+
+qs('#makeWallpaper').addEventListener('click', ()=>{
+  const text = `15 months\nMy Wifey\nLoved by you — loved by me`;
+  downloadTextAsFile(text, 'wallpaper.txt');
+  extraResult.textContent = 'Downloaded a simple text wallpaper template. Copy into a notes app or use a simple image tool to make a phone wallpaper.';
+});
+
+qs('#countdownTemplate').addEventListener('click', ()=>{
+  const text = `Countdown template:\nDays until reunion: __\nNotes: Pack hugs, laughter, and coffee dates.`;
+  downloadTextAsFile(text, 'countdown.txt');
+  extraResult.textContent = 'Downloaded a small countdown template (text). Use your phone’s widget or any image editor to make it visual.';
+});
+
+function downloadTextAsFile(txt, name){
+  const blob = new Blob([txt], {type:'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = name; a.click(); URL.revokeObjectURL(url);
+}
+
+/* ---------- Init ---------- */
+renderPostcards();
